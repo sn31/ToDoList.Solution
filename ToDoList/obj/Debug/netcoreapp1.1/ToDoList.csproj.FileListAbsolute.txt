@@ -1,0 +1,8 @@
+/Users/skye/Documents/Epicodus Projects/ToDoList.Solution/ToDoList/bin/Debug/netcoreapp1.1/ToDoList.deps.json
+/Users/skye/Documents/Epicodus Projects/ToDoList.Solution/ToDoList/bin/Debug/netcoreapp1.1/ToDoList.dll
+/Users/skye/Documents/Epicodus Projects/ToDoList.Solution/ToDoList/bin/Debug/netcoreapp1.1/ToDoList.pdb
+/Users/skye/Documents/Epicodus Projects/ToDoList.Solution/ToDoList/obj/Debug/netcoreapp1.1/ToDoList.csprojResolveAssemblyReference.cache
+/Users/skye/Documents/Epicodus Projects/ToDoList.Solution/ToDoList/obj/Debug/netcoreapp1.1/ToDoList.csproj.CoreCompileInputs.cache
+/Users/skye/Documents/Epicodus Projects/ToDoList.Solution/ToDoList/obj/Debug/netcoreapp1.1/ToDoList.AssemblyInfo.cs
+/Users/skye/Documents/Epicodus Projects/ToDoList.Solution/ToDoList/obj/Debug/netcoreapp1.1/ToDoList.dll
+/Users/skye/Documents/Epicodus Projects/ToDoList.Solution/ToDoList/obj/Debug/netcoreapp1.1/ToDoList.pdb
