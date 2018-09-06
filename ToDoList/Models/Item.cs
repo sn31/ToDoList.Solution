@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
 using ToDoList.Models;
+using System.Linq;
 
 namespace ToDoList.Models
 {
     public class Item
     {
         private string _description;
-        private static List<Item> _instances = new List<Item>{};
-        public Item (string description)
+        private static List<Item> _instances = new List<Item> { };
+        public Item(string description)
         {
             _description = description;
         }
@@ -39,9 +40,9 @@ class Program
 {
     public static void Main()
     {
-        
+
         Console.WriteLine("Welcome to the To do");
-        Console.WriteLine("Would you like to add an item to your list or view your list? (Add/View)");
+        Console.WriteLine("Would you like to add an item to your list or view your list? (Add/View/Exit)");
         string userAction = Console.ReadLine().ToLower();
         while (userAction == "add")
         {
@@ -49,17 +50,30 @@ class Program
             string description = Console.ReadLine();
             Item myItem = new Item(description);
             myItem.Save();
-            Console.WriteLine("'{0}' has been added to your list. Would you like to add an item to your list or view your list? (Add/View)",myItem.GetDescription());
+            Console.WriteLine("'{0}' has been added to your list. Would you like to add an item to your list or view your list? (Add/View/Exit)", myItem.GetDescription());
             userAction = Console.ReadLine().ToLower();
         }
         if (userAction == "view")
         {
-            Console.WriteLine("Your To Do List: ");
             List<Item> instances = Item.GetAll();
-            foreach (Item thisItem in instances)
+            if (!instances.Any())
             {
-                Console.WriteLine(thisItem.GetDescription());
+                Console.WriteLine("You have no item to view! Would you like to add an item? (Add/Exit)");
+                userAction = Console.ReadLine().ToLower();
             }
+            else
+            {
+                Console.WriteLine("Your To Do List: ");
+                foreach (Item thisItem in instances)
+                {
+                    Console.WriteLine(thisItem.GetDescription());
+                }
+            }
+
+        }
+        else if (userAction == "exit")
+        {
+            Console.WriteLine("Goodbye!");
         }
     }
 }
