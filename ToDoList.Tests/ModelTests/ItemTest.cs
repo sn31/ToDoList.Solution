@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ToDoList.Models;
+using System.Collections.Generic;
 
 namespace ToDoList.TestTools
 {
@@ -33,6 +34,21 @@ namespace ToDoList.TestTools
 
             //Assert
             Assert.AreEqual(updatedDescription,result);
+        }
+        [TestMethod]
+        public void Save_ItemIsSavedToInstances_Item()
+        {
+            //Arrange
+            string description = "Walk the dog.";
+            Item newItem = new Item(description);
+            newItem.Save();
+
+            //Act
+            List<Item> instances = Item.GetAll();
+            Item savedItem = instances[0];
+
+            //Assert
+            Assert.AreEqual(newItem,savedItem);
         }
     }
 }
