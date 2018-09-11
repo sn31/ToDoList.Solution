@@ -12,11 +12,7 @@ namespace ToDoList.Tests
         [TestMethod]
         public void Index_ReturnsCorrectView_True()
         {
-            //Arrange
-            HomeController controller = new HomeController();
-            //Act
-            ActionResult indexView = controller.Index();
-            //Assert
+            ViewResult indexView = new HomeController().Index() as ViewResult;
             Assert.IsInstanceOfType(indexView,typeof(ViewResult));
         }
     }
