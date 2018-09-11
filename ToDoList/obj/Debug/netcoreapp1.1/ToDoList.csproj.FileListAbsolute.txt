@@ -6,3 +6,5 @@
 /Users/skye/Documents/Epicodus Projects/ToDoList.Solution/ToDoList/obj/Debug/netcoreapp1.1/ToDoList.AssemblyInfo.cs
 /Users/skye/Documents/Epicodus Projects/ToDoList.Solution/ToDoList/obj/Debug/netcoreapp1.1/ToDoList.dll
 /Users/skye/Documents/Epicodus Projects/ToDoList.Solution/ToDoList/obj/Debug/netcoreapp1.1/ToDoList.pdb
+/Users/skye/Documents/Epicodus Projects/ToDoList.Solution/ToDoList/bin/Debug/netcoreapp1.1/ToDoList.runtimeconfig.json
+/Users/skye/Documents/Epicodus Projects/ToDoList.Solution/ToDoList/bin/Debug/netcoreapp1.1/ToDoList.runtimeconfig.dev.json
