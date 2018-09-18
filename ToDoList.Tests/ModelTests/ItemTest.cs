@@ -82,6 +82,14 @@ namespace ToDoList.TestTools
             int result = Item.GetAll().Count;
             Assert.AreEqual(0,result);
         }
+        [TestMethod]
+        public void Equals_ReturnsTrueIfDescriptionsAReTheSame_ITem()
+        {
+            Item firstItem = new Item("Mow the lawn");
+            Item secondItem = new Item("Mow the lawn");
+
+            Assert.AreEqual(firstItem,secondItem);
+        }
         public void Dispose()
         {
             Item.ClearAll();

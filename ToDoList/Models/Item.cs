@@ -65,6 +65,19 @@ namespace ToDoList.Models
         conn.Dispose();
       }
     }
+    public override bool Equals(System.Object otherItem)
+    {
+      if (!(otherItem is Item))
+      {
+        return false;
+      }
+      else
+      {
+        Item newItem = (Item) otherItem;
+        bool descriptionEquality = (this.GetDescription() == newItem.GetDescription());
+        return descriptionEquality;
+      }
+    }
     // public static Item Find(int searchId)
     // {
     //   return _instances[searchId - 1];
