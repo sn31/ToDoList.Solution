@@ -29,15 +29,15 @@ namespace ToDoList.Controllers
             return View();
         }
 
-        [HttpGet("/categories/{categoryId}/items/{itemId}")]
-       public ActionResult Details(int categoryId, int itemId)
-       {
-          Item item = Item.Find(itemId);
-          Dictionary<string, object> model = new Dictionary<string, object>();
-          Category category = Category.Find(categoryId);
-          model.Add("item", item);
-          model.Add("category", category);
-          return View(item);
-       }
+    //     [HttpGet("/categories/{categoryId}/items/{itemId}")]
+    //    public ActionResult Details(int categoryId, int itemId)
+    //    {
+    //       Item item = Item.Find(itemId);
+    //       Dictionary<string, object> model = new Dictionary<string, object>();
+    //       Category category = Category.Find(categoryId);
+    //       model.Add("item", item);
+    //       model.Add("category", category);
+    //       return View(item);
+    //    }
     }
 }

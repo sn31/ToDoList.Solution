@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
-using ToDoList.Models;
 using System.Linq;
+using MySql.Data.MySqlClient;
+using ToDoList.Models;
 
 namespace ToDoList.Models
 {
@@ -9,13 +9,11 @@ namespace ToDoList.Models
   {
     private int _id;
     private string _description;
-    private static List<Item> _instances = new List<Item> {};
 
-    public Item (string description)
+    public Item(string Description, int Id = 0)
     {
-      _description = description;
-      _instances.Add(this);
-      _id = _instances.Count;
+      _description = Description;
+      _id = Id;
     }
     public string GetDescription()
     {
@@ -27,61 +25,49 @@ namespace ToDoList.Models
     }
     public static List<Item> GetAll()
     {
-      return _instances;
+      List<Item> allItems = new List<Item> { };
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT*FROM items";
+      MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+      while (rdr.Read())
+      {
+        int itemId = rdr.GetInt32(0);
+        string itemDescription = rdr.GetString(1);
+        Item newItem = new Item(itemDescription, itemId);
+        allItems.Add(newItem);
+      }
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return allItems;
     }
-     public int GetId()
+    public int GetId()
     {
       return _id;
     }
     public static void ClearAll()
     {
-      _instances.Clear();
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"DELETE FROM items;";
+
+      cmd.ExecuteNonQuery();
+
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
     }
-     public static Item Find(int searchId)
-    {
-      return _instances[searchId-1];
-    }
+    // public static Item Find(int searchId)
+    // {
+    //   return _instances[searchId - 1];
+    // }
   }
 }
-
-// class Program
-// {
-//     public static void Main()
-//     {
-
-//         Console.WriteLine("Welcome to the To Do List");
-//         Console.WriteLine("Would you like to add an item to your list or view your list? (Add/View/Exit)");
-//         string userAction = Console.ReadLine().ToLower();
-//         while (userAction == "add")
-//         {
-//             Console.WriteLine("Please enter the description for the new item.");
-//             string description = Console.ReadLine();
-//             Item myItem = new Item(description);
-//             myItem.Save();
-//             Console.WriteLine("'{0}' has been added to your list. Would you like to add an item to your list or view your list? (Add/View/Exit)", myItem.GetDescription());
-//             userAction = Console.ReadLine().ToLower();
-//         }
-//         if (userAction == "view")
-//         {
-//             List<Item> instances = Item.GetAll();
-//             if (!instances.Any())
-//             {
-//                 Console.WriteLine("You have no item to view! Would you like to add an item? (Add/Exit)");
-//                 userAction = Console.ReadLine().ToLower();
-//             }
-//             else
-//             {
-//                 Console.WriteLine("Your To Do List: ");
-//                 foreach (Item thisItem in instances)
-//                 {
-//                     Console.WriteLine(thisItem.GetDescription());
-//                 }
-//             }
-
-//         }
-//         else if (userAction == "exit")
-//         {
-//             Console.WriteLine("Goodbye!");
-//         }
-//     }
-// }
