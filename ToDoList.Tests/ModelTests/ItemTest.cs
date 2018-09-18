@@ -85,10 +85,11 @@ namespace ToDoList.TestTools
         [TestMethod]
         public void Equals_ReturnsTrueIfDescriptionsAReTheSame_ITem()
         {
-            Item firstItem = new Item("Mow the lawn");
-            Item secondItem = new Item("Mow the lawn");
-
-            Assert.AreEqual(firstItem,secondItem);
+            Item testItem = new Item("Mow the lawn");
+            testItem.Save();
+            List<Item> result = Item.GetAll();
+            List<Item> testList = new List<Item>{testItem};
+            CollectionAssert.AreEqual(testList,result);
         }
         public void Dispose()
         {
