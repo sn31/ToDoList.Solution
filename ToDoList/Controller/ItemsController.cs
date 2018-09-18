@@ -38,8 +38,6 @@ namespace ToDoList.Controllers
             Category category = Category.Find(categoryId);
             model.Add("item", item);
             model.Add("category", category);
-            Console.WriteLine(item.GetDescription());
-            Console.WriteLine("AAAA");
             return View(item);
 
         }
