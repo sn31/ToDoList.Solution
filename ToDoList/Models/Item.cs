@@ -117,7 +117,7 @@ namespace ToDoList.Models
       conn.Open();
 
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"SELECT*FROM items WHERE ID = @thisId;";
+      cmd.CommandText = @"SELECT*FROM items WHERE ID = @thisId ORDER BY date;";
       MySqlParameter thisId = new MySqlParameter();
       thisId.ParameterName = "@thisId";
       thisId.Value = id;

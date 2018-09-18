@@ -1,20 +1,19 @@
 using System.Collections.Generic;
+using MySql.Data.MySqlClient;
 
 namespace ToDoList.Models
 {
     public class Category
     {
-        private static List<Category> _instances = new List<Category> { };
+        private List<Item> _foundItems = new List<Item> {};
         private string _name;
         private int _id;
-        private List<Item> _items;
-
-        public Category(string categoryName)
+    
+        public Category(string categoryName, int Id = 0)
         {
             _name = categoryName;
-            _instances.Add(this);
-            _id = _instances.Count;
-            _items = new List<Item> { };
+            _id = Id;
+
         }
 
         public string GetName()
@@ -27,23 +26,143 @@ namespace ToDoList.Models
         }
         public static List<Category> GetAll()
         {
-            return _instances;
+            List<Category> allCategories = new List<Category> { };
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"SELECT*FROM categories";
+            MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+            while (rdr.Read())
+            {
+                int categoryId = rdr.GetInt32(0);
+                string categoryDescription = rdr.GetString(1);
+                Category newCategory = new Category(categoryDescription, categoryId);
+                allCategories.Add(newCategory);
+            }
+            conn.Close();
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+            return allCategories;
         }
         public static void Clear()
         {
-            _instances.Clear();
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+
+            var cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"DELETE FROM categories;";
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+
         }
-        public static Category Find(int searchId)
+        public override bool Equals(System.Object otherCategory)
         {
-            return _instances[searchId - 1];
+            if (!(otherCategory is Category))
+            {
+                return false;
+            }
+            else
+            {
+                Category newCategory = (Category) otherCategory;
+                bool descriptionEquality = (this.GetName() == newCategory.GetName());
+                return (descriptionEquality);
+            }
+        }
+        public override int GetHashCode()
+        {
+            return this.GetName().GetHashCode();
+        }
+        public void Save()
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+
+            var cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"INSERT INTO `categories` (`name`) VALUES (@categoryName);";
+            MySqlParameter name = new MySqlParameter();
+            name.ParameterName = "@categoryName";
+            name.Value = this._name;
+            cmd.Parameters.Add(name);
+
+            cmd.ExecuteNonQuery();
+            _id = (int) cmd.LastInsertedId;
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+        }
+        public static Category Find(int Id)
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+
+            var cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"SELECT*FROM categories WHERE categoryId = @thisId;";
+            MySqlParameter thisId = new MySqlParameter();
+            thisId.ParameterName = "@thisId";
+            thisId.Value = Id;
+            cmd.Parameters.Add(thisId);
+
+            var rdr = cmd.ExecuteReader() as MySqlDataReader;
+            int categoryId = 0;
+            string categoryName = "";
+
+            while (rdr.Read())
+            {
+                categoryId = rdr.GetInt32(0);
+                categoryName = rdr.GetString(1);
+
+            }
+            Category foundCategory = new Category(categoryName, categoryId);
+            conn.Close();
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+            return foundCategory;
         }
         public List<Item> GetItems()
         {
-            return _items;
+            
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+
+            var cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"SELECT*FROM items WHERE categoryId =@thisId ORDER BY date;";
+            MySqlParameter thisId = new MySqlParameter();
+            thisId.ParameterName = "@thisId";
+            thisId.Value = this._id;
+            cmd.Parameters.Add(thisId);
+
+            var rdr = cmd.ExecuteReader() as MySqlDataReader;
+            int itemId = 0;
+            string itemDescription = "";
+            string itemDueDate = "";
+
+            while (rdr.Read())
+            {
+                itemId = rdr.GetInt32(0);
+                itemDescription = rdr.GetString(1);
+                itemDueDate = rdr.GetDateTime(2).ToString();
+            }
+            Item foundItem = new Item(itemDescription, itemDueDate, itemId);
+            _foundItems.Add(foundItem);
+            conn.Close();
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+            return _foundItems;
         }
         public void AddItem(Item item)
         {
-            _items.Add(item);
+            _foundItems.Add(item);
         }
     }
 }

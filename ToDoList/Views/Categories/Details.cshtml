@@ -2,7 +2,7 @@
 <ol>
 @foreach (var item in @Model["items"])
 {
-  <li><a href='/categories/@Model["category"].GetId()/items/@item.GetId()'>@item.GetDescription()</a></li>
+  <li>@item.GetDescription() @item.dueDate</li>
 }
 </ol>
 <p><a href="/categories/@Model["category"].GetId()/items/new">Add a new item</a></p>

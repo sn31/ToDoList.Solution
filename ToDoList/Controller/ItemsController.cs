@@ -38,7 +38,7 @@ namespace ToDoList.Controllers
             Category category = Category.Find(categoryId);
             model.Add("item", item);
             model.Add("category", category);
-            return View(item);
+            return View(model);
 
         }
     }
