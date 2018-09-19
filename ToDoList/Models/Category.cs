@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 
@@ -104,14 +105,11 @@ namespace ToDoList.Models
             conn.Open();
 
             var cmd = conn.CreateCommand() as MySqlCommand;
-            cmd.CommandText = @"SELECT*FROM categories WHERE categoryId = @thisId;";
-            MySqlParameter thisId = new MySqlParameter();
-            thisId.ParameterName = "@thisId";
-            thisId.Value = Id;
-            cmd.Parameters.Add(thisId);
+            cmd.CommandText = @"SELECT * FROM `categories` WHERE `categoryId` = @thisId;";
+            cmd.Parameters.AddWithValue("@thisId", Id);
 
             MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
-            rdr.Read();
+            
             int categoryId = 0;
             string categoryName = "";
             while (rdr.Read())
@@ -154,12 +152,10 @@ namespace ToDoList.Models
                 Item foundItem;
                 if (rdr.IsDBNull(2))
                 {
-                    //if current row's duedate column's value is null
                     foundItem = new Item(itemDescription, this._id);
                 }
                 else
                 {
-                    //if current row's duedate column's value is not null and has specific value
                     itemDueDate = rdr.GetDateTime(2).ToString();
                     foundItem = new Item(itemDescription, itemDueDate, this._id);
                 }
