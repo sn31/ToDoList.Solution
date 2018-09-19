@@ -41,16 +41,6 @@ namespace ToDoList.Controllers
             return View("Details",model);
         }
 
-        [HttpPost("/categories/items")]
-        public ActionResult CreateItem(int categoryId, string itemDescription, string itemDue) //pulling from form.
-        {
-            Dictionary<string, object> model = new Dictionary<string, object>();
-            Category foundCategory = Category.Find(categoryId);
-            Item newItem = new Item(itemDescription, itemDue, categoryId);
-            newItem.Save();
-            model.Add("items", newItem);
-            model.Add("category", foundCategory);
-            return View(model);
-        }
+        
     }
 }
