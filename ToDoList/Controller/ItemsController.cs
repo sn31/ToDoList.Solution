@@ -39,7 +39,19 @@ namespace ToDoList.Controllers
             model.Add("item", item);
             model.Add("category", category);
             return View(model);
-
+        }
+          [HttpPost("/items")]
+        public ActionResult CreateItem(int categoryId, string itemDescription,string itemDue) //pulling from form.
+        {
+          Dictionary<string, object> model = new Dictionary<string, object>();
+          Category foundCategory = Category.Find(categoryId);
+          Item newItem = new Item(itemDescription,itemDue,categoryId);
+          newItem.Save();
+        //   foundCategory.AddItem(newItem);
+        //   List<Item> categoryItems = foundCategory.GetItems();
+          model.Add("items", newItem);
+          model.Add("category", foundCategory);
+          return View("Details", model);
         }
     }
 }

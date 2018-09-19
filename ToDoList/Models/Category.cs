@@ -5,15 +5,14 @@ namespace ToDoList.Models
 {
     public class Category
     {
-        private List<Item> _foundItems = new List<Item> {};
+        private List<Item> _foundItems = new List<Item> { };
         private string _name;
         private int _id;
-    
+
         public Category(string categoryName, int Id = 0)
         {
             _name = categoryName;
             _id = Id;
-
         }
 
         public string GetName()
@@ -91,7 +90,9 @@ namespace ToDoList.Models
             cmd.Parameters.Add(name);
 
             cmd.ExecuteNonQuery();
+
             _id = (int) cmd.LastInsertedId;
+            conn.Close();
             if (conn != null)
             {
                 conn.Dispose();
@@ -109,17 +110,17 @@ namespace ToDoList.Models
             thisId.Value = Id;
             cmd.Parameters.Add(thisId);
 
-            var rdr = cmd.ExecuteReader() as MySqlDataReader;
+            MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+            rdr.Read();
             int categoryId = 0;
             string categoryName = "";
-
             while (rdr.Read())
             {
                 categoryId = rdr.GetInt32(0);
                 categoryName = rdr.GetString(1);
-
             }
             Category foundCategory = new Category(categoryName, categoryId);
+
             conn.Close();
             if (conn != null)
             {
@@ -129,7 +130,7 @@ namespace ToDoList.Models
         }
         public List<Item> GetItems()
         {
-            
+
             MySqlConnection conn = DB.Connection();
             conn.Open();
 
@@ -149,10 +150,21 @@ namespace ToDoList.Models
             {
                 itemId = rdr.GetInt32(0);
                 itemDescription = rdr.GetString(1);
-                itemDueDate = rdr.GetDateTime(2).ToString();
+
+                Item foundItem;
+                if (rdr.IsDBNull(2))
+                {
+                    //if current row's duedate column's value is null
+                    foundItem = new Item(itemDescription, this._id);
+                }
+                else
+                {
+                    //if current row's duedate column's value is not null and has specific value
+                    itemDueDate = rdr.GetDateTime(2).ToString();
+                    foundItem = new Item(itemDescription, itemDueDate, this._id);
+                }
+                _foundItems.Add(foundItem);
             }
-            Item foundItem = new Item(itemDescription, itemDueDate, itemId);
-            _foundItems.Add(foundItem);
             conn.Close();
             if (conn != null)
             {
@@ -160,9 +172,6 @@ namespace ToDoList.Models
             }
             return _foundItems;
         }
-        public void AddItem(Item item)
-        {
-            _foundItems.Add(item);
-        }
+
     }
 }
