@@ -141,12 +141,12 @@ namespace ToDoList.Models
       Item foundItem;
       if (rdr.IsDBNull(2))
       {
-        foundItem = new Item(itemDescription,id);
+        foundItem = new Item(itemDescription, id);
       }
       else
       {
         itemDueDate = rdr.GetDateTime(2);
-        foundItem = new Item(itemDescription, itemDueDate,id);
+        foundItem = new Item(itemDescription, itemDueDate, id);
       }
 
       conn.Close();
@@ -163,10 +163,19 @@ namespace ToDoList.Models
       conn.Open();
 
       MySqlCommand cmd = conn.CreateCommand();
+      cmd.CommandText = @"INSERT INTO categories_items (category_id, item_id) VALUES (@CategoryId, @ItemId);";
+      cmd.Parameters.AddWithValue("@CategoryId", newCategory.GetId());
+      cmd.Parameters.AddWithValue("@ItemId", _id);
+      cmd.ExecuteNonQuery();
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
     }
     public List<Category> GetCategories()
     {
-      List<Category> categories = new List<Category> {};
+      List<Category> categories = new List<Category> { };
       return categories;
     }
   }
