@@ -71,6 +71,7 @@ namespace ToDoList.Tests
             //Assert
             Assert.AreEqual(testId, result);
         }
+
         [TestMethod]
         public void Find_FindsCategoryInDatabase_Category() //Test is failing for no reason?
         {
@@ -83,6 +84,24 @@ namespace ToDoList.Tests
 
             //Assert
             Assert.AreEqual(testCategory, result);
+        }
+
+        [TestMethod]
+        public void Delete_DeletesCategoryAssociationsFromDatabase_CategoryList()
+        {
+            Item testItem = new Item("Mow the lawn");
+            testItem.Save();
+
+            string testName = "Home stuff";
+            Category testCategory = new Category(testName);
+            testCategory.Save();
+
+            testCategory.AddItem(testItem);
+            testCategory.Delete();
+
+            List<Category> resultItemCategories = testItem.GetCategories();
+            List<Category> testItemCategories = new List<Category>{};
+            CollectionAssert.AreEqual(testItemCategories, resultItemCategories);
         }
     }
 }
