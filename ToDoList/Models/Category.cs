@@ -142,7 +142,7 @@ namespace ToDoList.Models
             var rdr = cmd.ExecuteReader() as MySqlDataReader;
             int itemId = 0;
             string itemDescription = "";
-            string itemDueDate = "";
+            DateTime itemDueDate = DateTime.MinValue;
 
             while (rdr.Read())
             {
@@ -156,7 +156,7 @@ namespace ToDoList.Models
                 }
                 else
                 {
-                    itemDueDate = rdr.GetDateTime(2).ToString();
+                    itemDueDate = rdr.GetDateTime(2);
                     foundItem = new Item(itemDescription, itemDueDate, this._id);
                 }
                 _foundItems.Add(foundItem);
@@ -168,7 +168,7 @@ namespace ToDoList.Models
             }
             return _foundItems;
         }
-        public void ClearAll()
+        public static void ClearAll()
         {
             MySqlConnection conn = DB.Connection();
             conn.Open();

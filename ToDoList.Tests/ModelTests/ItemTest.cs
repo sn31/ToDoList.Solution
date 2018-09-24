@@ -11,7 +11,7 @@ public class ItemTest : IDisposable
  {
     public ItemTest()
     {
-      DBConfiguration.ConnectionString = "server=localhost;user id=root;password=root;port=88896;database=todo_test;";
+      DBConfiguration.ConnectionString = "server=localhost;user id=root;password=root;port=8889;database=todo_test;";
     }
     public void Dispose()
     {
@@ -73,7 +73,7 @@ public class ItemTest : IDisposable
     }
 
     [TestMethod]
-    public void Find_FindsItemInDatabase_Item()
+    public void Find_FindsItemInDatabase_Item() //Test is failing for no reason?
     {
       //Arrange
       Item testItem = new Item("Mow the lawn");
@@ -85,6 +85,35 @@ public class ItemTest : IDisposable
       //Assert
       Assert.AreEqual(testItem, result);
     }
+    [TestMethod]
+    public void AddCategory_AddsCategoryToItem_CategoryList()
+    {
+        Item testItem = new Item("Mow the lawn");
+        testItem.Save();
 
+        Category testCategory = new Category("Home stuff");
+        testCategory.Save();
+
+        testItem.AddCategory(testCategory);
+        List<Category> result = testItem.GetCategories();
+        List<Category> testList = new List<Category>{testCategory};
+
+        CollectionAssert.AreEqual(testList,result);
+    }
+
+    [TestMethod]
+    public void GetCategories_ReturnsAllItemCategories_CategoryList()
+    {
+        Item testItem = new Item("Mow the lawn");
+        testItem.Save();
+
+        Category testCategory = new Category("Home stuff");
+        testCategory.Save();
+
+        testItem.AddCategory(testCategory);
+        List<Category> result = testItem.GetCategories();
+        List<Category> testList = new List<Category> {testCategory};
+        CollectionAssert.AreEqual(testList, result);
+    }
   }
 }
