@@ -100,8 +100,53 @@ namespace ToDoList.Tests
             testCategory.Delete();
 
             List<Category> resultItemCategories = testItem.GetCategories();
-            List<Category> testItemCategories = new List<Category>{};
+            List<Category> testItemCategories = new List<Category> { };
             CollectionAssert.AreEqual(testItemCategories, resultItemCategories);
+        }
+
+        [TestMethod]
+        public void Test_AddItem_AddsItemToCategory()
+        {
+            Category testCategory = new Category("Household chores");
+            testCategory.Save();
+
+            Item testItem = new Item("Mow the lawn");
+            testItem.Save();
+
+            Item testItem2 = new Item("Water the garden");
+            testItem2.Save();
+
+            //Act
+            testCategory.AddItem(testItem);
+            testCategory.AddItem(testItem2);
+            List<Item> result = testCategory.GetItems();
+            List<Item> testList = new List<Item> { testItem, testItem2 };
+            Console.WriteLine(result.Count);
+            Console.WriteLine(testList.Count);
+            //Assert
+            CollectionAssert.AreEqual(testList, result);
+        }
+
+        [TestMethod]
+        public void GetItems_ReturnsAllCategoryItems_ItemList()
+        {
+            //Arrange
+            Category testCategory = new Category("Household chores");
+            testCategory.Save();
+
+            Item testItem1 = new Item("Mow the lawn");
+            testItem1.Save();
+
+            Item testItem2 = new Item("Buy plane ticket");
+            testItem2.Save();
+
+            //Act
+            testCategory.AddItem(testItem1);
+            List<Item> savedItems = testCategory.GetItems();
+            List<Item> testList = new List<Item> { testItem1 };
+
+            //Assert
+            CollectionAssert.AreEqual(testList, savedItems);
         }
     }
 }

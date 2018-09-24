@@ -24,7 +24,7 @@ namespace ToDoList.Tests
         {
             //Arrange, Act
             int result = Item.GetAll().Count;
-            
+
             //Assert
             Assert.AreEqual(0, result);
         }
