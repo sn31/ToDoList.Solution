@@ -168,6 +168,19 @@ namespace ToDoList.Models
             }
             return _foundItems;
         }
-
+        public void ClearAll()
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            
+            MySqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = @"DELETE FROM categories;";
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            if (conn !=null)
+            {
+                conn.Dispose();
+            }
+        }
     }
 }

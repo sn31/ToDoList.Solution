@@ -59,6 +59,25 @@ namespace ToDoList.Models
     {
       return _id;
     }
+    public override bool Equals(System.Object otherItem)
+        {
+          if (!(otherItem is Item))
+          {
+            return false;
+          }
+          else
+          {
+             Item newItem = (Item) otherItem;
+             bool idEquality = this.GetId() == newItem.GetId();
+             bool descriptionEquality = this.GetDescription() == newItem.GetDescription();
+             return (idEquality && descriptionEquality);
+           }
+        }
+        public override int GetHashCode()
+        {
+             return this.GetDescription().GetHashCode();
+        }
+
     public static void ClearAll()
     {
       MySqlConnection conn = DB.Connection();
@@ -75,23 +94,6 @@ namespace ToDoList.Models
         conn.Dispose();
       }
     }
-    public override bool Equals(System.Object otherItem)
-    {
-      if (!(otherItem is Item))
-      {
-        return false;
-      }
-      else
-      {
-        Item newItem = (Item) otherItem;
-        bool descriptionEquality = (this.GetDescription() == newItem.GetDescription());
-        return (descriptionEquality);
-      }
-    }
-    public override int GetHashCode()
-    {
-      return this.GetDescription().GetHashCode();
-    }
 
     public void Save()
     {
@@ -105,6 +107,7 @@ namespace ToDoList.Models
 
       cmd.ExecuteNonQuery();
       _id = (int) cmd.LastInsertedId;
+      conn.Close();
       if (conn != null)
       {
         conn.Dispose();
@@ -150,6 +153,11 @@ namespace ToDoList.Models
         conn.Dispose();
       }
       return foundItem;
+    }
+
+    public void AddCategory(Category newCategory)
+    {
+
     }
   }
 }
