@@ -175,7 +175,40 @@ namespace ToDoList.Models
     }
     public List<Category> GetCategories()
     {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      MySqlCommand cmd = conn.CreateCommand();
+      cmd.CommandText = @"SELECT category_id FROM categories_items WHERE item_id = @itemId;";
+      cmd.Parameters.AddWithValue("@itemId", _id);
+      MySqlDataReader rdr = cmd.ExecuteReader();
+      List<int> categoryIds = new List<int> { };
+      while (rdr.Read())
+      {
+        int categoryId = rdr.GetInt32(0);
+        categoryIds.Add(categoryId);
+      }
+      rdr.Dispose();
       List<Category> categories = new List<Category> { };
+      foreach (int categoryId in categoryIds)
+      {
+        MySqlCommand categoryQuery = conn.CreateCommand();
+        categoryQuery.CommandText = @"SELECT * FROM categories WHERE categoryId = @CategoryId;";
+        categoryQuery.Parameters.AddWithValue("@CategoryId", categoryId);
+        MySqlDataReader categoryQueryRdr = categoryQuery.ExecuteReader();
+        while (categoryQueryRdr.Read())
+        {
+          int thisCategoryId = categoryQueryRdr.GetInt32(0);
+          string categoryName = categoryQueryRdr.GetString(1);
+          Category foundCategory = new Category(categoryName, thisCategoryId);
+          categories.Add(foundCategory);
+        }
+        categoryQueryRdr.Dispose();
+      }
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
       return categories;
     }
   }
