@@ -77,6 +77,10 @@ namespace ToDoList.Models
     {
       return this.GetDescription().GetHashCode();
     }
+    public override string ToString()
+    {
+      return String.Format("{{ id={0}, desc={1} }}", _id, _description); //override the ToString method to show the id and description of the current object.
+    }
 
     public static void ClearAll()
     {
@@ -137,12 +141,12 @@ namespace ToDoList.Models
       Item foundItem;
       if (rdr.IsDBNull(2))
       {
-        foundItem = new Item(itemDescription);
+        foundItem = new Item(itemDescription,id);
       }
       else
       {
         itemDueDate = rdr.GetDateTime(2);
-        foundItem = new Item(itemDescription, itemDueDate);
+        foundItem = new Item(itemDescription, itemDueDate,id);
       }
 
       conn.Close();
@@ -155,7 +159,10 @@ namespace ToDoList.Models
 
     public void AddCategory(Category newCategory)
     {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
 
+      MySqlCommand cmd = conn.CreateCommand();
     }
     public List<Category> GetCategories()
     {
