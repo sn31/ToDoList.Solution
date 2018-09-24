@@ -109,7 +109,7 @@ namespace ToDoList.Models
             cmd.Parameters.AddWithValue("@thisId", Id);
 
             MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
-            
+
             int categoryId = 0;
             string categoryName = "";
             while (rdr.Read())
@@ -172,15 +172,35 @@ namespace ToDoList.Models
         {
             MySqlConnection conn = DB.Connection();
             conn.Open();
-            
+
             MySqlCommand cmd = conn.CreateCommand();
             cmd.CommandText = @"DELETE FROM categories;";
             cmd.ExecuteNonQuery();
             conn.Close();
-            if (conn !=null)
+            if (conn != null)
             {
                 conn.Dispose();
             }
+        }
+        public void AddItem(Item newItem)
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            MySqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = @"INSERT INTO categories_items (category_id, item_id) VALUES (@CategoryId, @ItemId);";
+            cmd.Parameters.AddWithValue("@CategoryId", _id);
+            cmd.Parameters.AddWithValue("@ItemId", newItem.GetId());
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+        }
+
+        public void Delete()
+        {
+            
         }
     }
 }
